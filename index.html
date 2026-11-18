@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Everly Science">
+  <meta name="theme-color" content="#9fd4ea">
+  <title>Everly's Science Practice</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b9dff0'/%3E%3Cpath d='M6 50 L24 18 L42 50 Z' fill='%235d7284'/%3E%3Cpath d='M24 18 L30 30 L18 30 Z' fill='%23f7fbff'/%3E%3Cpath d='M28 50 Q44 30 60 50 Z' fill='%236f8f55'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c2b24;
+      --paper: #fffaf3;
+      --clay: #9a3d12;
+      --clay-deep: #6d2a0c;
+      --forest: #146c43;
+      --forest-deep: #0d4a2e;
+      --gold: #f6c445;
+      --line: #1c2b24;
+      --sans: Nunito, "Segoe UI", "Trebuchet MS", sans-serif;
+      --serif: Fraunces, Georgia, "Palatino Linotype", Palatino, serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at 12% 8%, #fff6d4 0 70px, transparent 72px),
+        linear-gradient(#9fd4ea, #d7eef6 32%, #f3ead7 32%, #e7dcc4);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #app {
+      width: min(760px, calc(100% - 28px));
+      margin: 28px auto 48px;
+    }
+
+    .card {
+      position: relative;
+      background: var(--paper);
+      border: 3px solid var(--line);
+      border-radius: 28px;
+      box-shadow: 8px 8px 0 var(--line);
+      padding: 22px 22px 26px;
+    }
+
+    .top { position: relative; padding-right: 92px; }
+
+    .eyebrow {
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+
+    h1 {
+      margin: 2px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(2.1rem, 5vw, 3.3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+    }
+
+    .when {
+      margin: 8px 0 0;
+      font-weight: 800;
+      color: var(--clay);
+    }
+
+    .stamp {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 84px;
+      height: 84px;
+      border: 3px dashed var(--clay);
+      border-radius: 50%;
+      color: var(--clay);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(8deg);
+      font-weight: 800;
+      line-height: 1.05;
+      background: rgba(255, 250, 243, 0.85);
+    }
+
+    .stamp span { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; }
+    .stamp strong { font-family: var(--serif); font-size: 1.35rem; }
+    .stamp em { font-style: normal; font-size: 0.85rem; }
+
+    .scene {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: 14px;
+      border-radius: 18px;
+      border: 3px solid var(--line);
+    }
+
+    .bird { animation: fly 7s ease-in-out infinite; }
+    @keyframes fly {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-16px, 5px); }
+    }
+
+    .welcome, .blurb, .fine, .fb-why, .fb-picked, .miss p, .write-card p {
+      font-size: 1.12rem;
+      line-height: 1.45;
+    }
+
+    .welcome { margin: 16px 0 8px; font-weight: 700; }
+
+    .read-btn, .go-btn, .ghost-btn, .mode {
+      font-family: inherit;
+      cursor: pointer;
+      border: 3px solid var(--line);
+    }
+
+    .read-btn {
+      position: sticky;
+      top: 10px;
+      z-index: 3;
+      width: 100%;
+      margin-top: 16px;
+      background: var(--clay);
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 800;
+      border-radius: 999px;
+      padding: 14px 18px;
+      box-shadow: 0 7px 0 var(--clay-deep);
+    }
+
+    .read-btn:active { transform: translateY(2px); box-shadow: 0 5px 0 var(--clay-deep); }
+    .read-btn[aria-pressed="true"] { background: #24312b; box-shadow: 0 7px 0 #0d1411; }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .mix {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-weight: 800;
+    }
+
+    .mix input { width: 1.15rem; height: 1.15rem; accent-color: var(--forest); }
+
+    .sound-btn {
+      font-family: inherit;
+      font-weight: 800;
+      background: transparent;
+      border: 0;
+      color: var(--ink);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .modes { display: grid; gap: 12px; margin-top: 14px; }
+
+    .mode {
+      text-align: left;
+      background: white;
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 5px 5px 0 var(--line);
+      display: grid;
+      gap: 2px;
+    }
+
+    .mode:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--line); }
+    .mode.featured { background: #fff4d8; }
+    .mode-kicker { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--clay); }
+    .mode-title { font-family: var(--serif); font-size: 1.55rem; font-weight: 700; }
+    .mode-blurb, .mode-best { font-weight: 700; }
+    .mode-best { color: var(--forest); }
+
+    .sheet-toggle {
+      margin-top: 14px;
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-weight: 800;
+      font-size: 1.05rem;
+      box-shadow: 4px 4px 0 var(--line);
+    }
+
+    .sheet-toggle:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--line); }
+
+    #sheet-panel { display: grid; gap: 12px; margin-top: 12px; }
+
+    #sheet-panel figure { margin: 0; }
+    #sheet-panel img {
+      width: 100%;
+      height: auto;
+      border: 3px solid var(--line);
+      border-radius: 12px;
+      background: white;
+    }
+    #sheet-panel figcaption { font-weight: 800; margin-bottom: 6px; }
+
+    .count {
+      margin: 16px 0 8px;
+      font-weight: 800;
+    }
+
+    .bar {
+      height: 14px;
+      border: 3px solid var(--line);
+      border-radius: 999px;
+      background: white;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), #ef9a3a);
+    }
+
+    .halfway {
+      margin: 12px 0 0;
+      font-weight: 800;
+      background: #fff4d8;
+      border: 3px solid var(--line);
+      border-radius: 12px;
+      padding: 8px 12px;
+    }
+
+    #prompt {
+      margin: 12px 0 12px;
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    .choices { display: grid; gap: 10px; margin: 0; padding: 0; border: 0; }
+
+    .choice {
+      position: relative;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: white;
+      border: 3px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      font-weight: 800;
+      font-size: 1.12rem;
+      line-height: 1.35;
+      cursor: pointer;
+    }
+
+    .choice input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .choice:has(input:focus-visible) { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .choice:has(input:checked) { background: #fff4d8; box-shadow: inset 0 0 0 2px var(--clay); }
+    .choice.is-correct { background: #e5f6ec; box-shadow: inset 0 0 0 3px var(--forest); }
+    .choice.is-wrong { background: #fde8df; }
+    .is-reading { background: #fff3c4 !important; box-shadow: inset 0 0 0 3px #c89600; border-radius: 12px; }
+
+    .badge {
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      color: white;
+      font-weight: 800;
+    }
+
+    .go-btn, .ghost-btn {
+      width: 100%;
+      margin-top: 12px;
+      border-radius: 999px;
+      padding: 14px 18px;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .go-btn {
+      background: var(--forest);
+      color: white;
+      box-shadow: 0 7px 0 var(--forest-deep);
+    }
+
+    .go-btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+    .go-btn:not(:disabled):active { transform: translateY(2px); box-shadow: 0 5px 0 var(--forest-deep); }
+
+    .ghost-btn { background: white; box-shadow: 0 6px 0 var(--line); }
+    .ghost-btn:active { transform: translateY(2px); box-shadow: 0 4px 0 var(--line); }
+
+    #feedback { margin-top: 12px; border-radius: 16px; padding: 12px 14px; border: 3px solid var(--line); }
+    [hidden] { display: none !important; }
+    #feedback.good { background: #e5f6ec; }
+    #feedback.learn { background: #fff4d8; }
+    .fb-title { margin: 0; font-family: var(--serif); font-size: 1.5rem; }
+    .fb-picked, .fb-why { margin: 8px 0 0; }
+    .fb-why { font-weight: 800; }
+
+    .score {
+      margin: 8px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      line-height: 1;
+    }
+
+    .stars { margin: 4px 0 0; letter-spacing: 0.15em; font-size: 1.4rem; color: #c89600; }
+    .new-best { display: inline-block; margin-top: 6px; font-weight: 800; background: var(--gold); border: 3px solid var(--line); border-radius: 999px; padding: 2px 10px; }
+
+    .miss {
+      background: white;
+      border: 3px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .miss h3 { margin: 0; font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; }
+    .miss .remember { font-weight: 800; }
+
+    .write-card {
+      margin-top: 16px;
+      background: #e7f4fb;
+      border: 3px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .write-card h2 { margin: 0 0 6px; font-family: var(--serif); font-size: 1.6rem; }
+
+    .confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+    .confetti i {
+      position: absolute;
+      top: -12px;
+      width: 10px;
+      height: 16px;
+      border-radius: 2px;
+      animation: fall 1.3s ease-in forwards;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(105vh) rotate(180deg); opacity: 0.2; }
+    }
+
+    .fine { margin: 16px 0 0; font-weight: 700; }
+
+    button:focus-visible, .choice:focus-within {
+      outline: 3px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    @media (max-width: 640px) {
+      #app { width: min(100% - 16px, 760px); margin: 10px auto 28px; }
+      .card { padding: 16px; border-radius: 22px; box-shadow: 5px 5px 0 var(--line); }
+      .top { padding-right: 0; }
+      .stamp { position: static; margin: 10px 0 0; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bird, .confetti i { animation: none; }
+      .read-btn:active, .go-btn:active, .ghost-btn:active, .mode:active, .sheet-toggle:active { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="live" class="sr-only" aria-live="polite"></div>
+  <main id="app"></main>
+  <noscript>
+    <p>This practice test needs JavaScript. Turn JavaScript on, then open the page again.</p>
+  </noscript>
+  <script>
+    const QUESTIONS = [
+      {
+        id: "landscape",
+        group: "land",
+        topic: "Landscape",
+        prompt: "A landscape is…",
+        choices: [
+          "a drawing of Earth's surface",
+          "the stretch of land you can see from a place",
+          "a body of freshwater that flows",
+          "the low land between two mountains"
+        ],
+        answer: 1,
+        why: "A landscape is the stretch of land you can see from a place."
+      },
+      {
+        id: "slope",
+        group: "land",
+        topic: "Slope",
+        prompt: "Slope means the landscape…",
+        choices: [
+          "is covered only in ice",
+          "is an area of land surrounded by water",
+          "is on a slant, with one end higher than the other",
+          "is always wide and flat"
+        ],
+        answer: 2,
+        why: "Slope means the landscape is on a slant, with one end higher than the other."
+      },
+      {
+        id: "map",
+        group: "land",
+        topic: "Map",
+        prompt: "A map is…",
+        choices: [
+          "a drawing of Earth's surface",
+          "a person who studies snow and ice",
+          "the tallest kind of landform",
+          "a mound of land and rock"
+        ],
+        answer: 0,
+        why: "A map is a drawing of Earth's surface."
+      },
+      {
+        id: "surveyors",
+        group: "land",
+        topic: "Land surveyors",
+        prompt: "What do land surveyors do?",
+        choices: [
+          "They study how glaciers form and move.",
+          "They only paint maps blue, green, and white.",
+          "They count the animals in a valley.",
+          "They collect data about the shape, location, and height of land."
+        ],
+        answer: 3,
+        why: "Land surveyors collect data about the shape, location, and height of land."
+      },
+      {
+        id: "glaciologists",
+        group: "land",
+        topic: "Glaciologists",
+        prompt: "What do glaciologists study?",
+        choices: [
+          "The shape, location, and height of land.",
+          "Snow and ice, such as how glaciers form and move.",
+          "How many continents there are.",
+          "Only rivers and ponds."
+        ],
+        answer: 1,
+        why: "Glaciologists study snow and ice, such as how glaciers form and move."
+      },
+      {
+        id: "landform",
+        group: "land",
+        topic: "Landform",
+        prompt: "A landform is…",
+        choices: [
+          "one of the shapes of Earth's surface",
+          "a large, deep body of salt water",
+          "a color used on a map",
+          "a tool that measures mountains"
+        ],
+        answer: 0,
+        why: "A landform is one of the shapes of Earth's surface."
+      },
+      {
+        id: "continents",
+        group: "land",
+        topic: "Continents",
+        prompt: "The 7 biggest areas of land are called…",
+        choices: [
+          "islands",
+          "oceans",
+          "continents",
+          "plains"
+        ],
+        answer: 2,
+        why: "The 7 biggest areas of land are continents."
+      },
+      {
+        id: "island",
+        group: "land",
+        topic: "Island",
+        prompt: "An island is…",
+        choices: [
+          "low land between two mountains or hills",
+          "a wide, flat land",
+          "a body of water with land all around it",
+          "an area of land surrounded by water"
+        ],
+        answer: 3,
+        why: "An island is an area of land surrounded by water."
+      },
+      {
+        id: "mountain",
+        group: "land",
+        topic: "Mountain",
+        prompt: "Which landform is the tallest, and often has pointed tops and steep sides?",
+        choices: [
+          "a plain",
+          "a mountain",
+          "a valley",
+          "a pond"
+        ],
+        answer: 1,
+        why: "The tallest kind of landform is a mountain. Mountains often have pointed tops and steep sides. A mountain is very tall and has a steep top."
+      },
+      {
+        id: "sierra",
+        group: "land",
+        topic: "Sierra Nevada",
+        prompt: "The Sierra Nevada is a mountain range. Where can it be found?",
+        choices: [
+          "in the Western United States",
+          "at the bottom of the ocean",
+          "inside a pond",
+          "only on a flat plain"
+        ],
+        answer: 0,
+        why: "The Sierra Nevada is a mountain range in the Western United States."
+      },
+      {
+        id: "valley",
+        group: "land",
+        topic: "Valley",
+        prompt: "A valley is…",
+        choices: [
+          "a mound of land and rock",
+          "the tallest landform on Earth",
+          "the low land between two mountains or hills",
+          "a large, deep body of salt water"
+        ],
+        answer: 2,
+        why: "A valley is the low land between two mountains or hills."
+      },
+      {
+        id: "hills",
+        group: "land",
+        topic: "Hills",
+        prompt: "Hills are…",
+        choices: [
+          "bodies of freshwater that flow",
+          "areas of land surrounded by water",
+          "the 7 biggest areas of land",
+          "mounds of land and rock"
+        ],
+        answer: 3,
+        why: "Hills are mounds of land and rock. A hill is smaller than a mountain and has a rounded top."
+      },
+      {
+        id: "plain",
+        group: "land",
+        topic: "Plain",
+        prompt: "A land that is wide and flat is called a…",
+        choices: [
+          "mountain",
+          "plain",
+          "river",
+          "glacier"
+        ],
+        answer: 1,
+        why: "A land that is wide and flat is called a plain."
+      },
+      {
+        id: "map-landforms",
+        group: "water",
+        topic: "Landforms on a map",
+        prompt: "On a map of Earth's surface, which landforms will you see?",
+        choices: [
+          "hills, mountains, and plains",
+          "only rivers and ponds",
+          "only snow and ice",
+          "only animals and trees"
+        ],
+        answer: 0,
+        why: "On a map of Earth's surface, you will see landforms such as hills, mountains, and plains."
+      },
+      {
+        id: "water-places",
+        group: "water",
+        topic: "Where water is found",
+        prompt: "Water can be found on Earth in oceans, lakes, rivers, ponds, and…",
+        choices: [
+          "continents",
+          "plains",
+          "glaciers",
+          "slopes"
+        ],
+        answer: 2,
+        why: "Water can be found on Earth in oceans, lakes, rivers, ponds, and glaciers."
+      },
+      {
+        id: "ocean",
+        group: "water",
+        topic: "Ocean",
+        prompt: "An ocean is…",
+        choices: [
+          "a body of water with land all around it",
+          "freshwater that flows",
+          "a mound of land and rock",
+          "a large, deep body of salt water"
+        ],
+        answer: 3,
+        why: "An ocean is a large, deep body of salt water."
+      },
+      {
+        id: "lake",
+        group: "water",
+        topic: "Lake",
+        prompt: "A lake is…",
+        choices: [
+          "a large, deep body of salt water",
+          "a body of water that has land all around it",
+          "land that is wide and flat",
+          "a mountain made of ice"
+        ],
+        answer: 1,
+        why: "A lake is a body of water that has land all around it."
+      },
+      {
+        id: "river",
+        group: "water",
+        topic: "River",
+        prompt: "A river is…",
+        choices: [
+          "a body of freshwater that flows, or moves",
+          "a large, deep body of salt water",
+          "an area of land surrounded by water",
+          "the low land between two hills"
+        ],
+        answer: 0,
+        why: "A river is a body of freshwater that flows, or moves."
+      },
+      {
+        id: "more-water",
+        group: "water",
+        topic: "Earth's surface",
+        prompt: "Earth's surface is covered in…",
+        choices: [
+          "more land",
+          "only mountains",
+          "more water",
+          "only rivers"
+        ],
+        answer: 2,
+        why: "Earth's surface is covered in more water."
+      },
+      {
+        id: "colors",
+        group: "water",
+        topic: "Map colors",
+        prompt: "Which sentence about map colors is true?",
+        choices: [
+          "Blue is water, green is land, and white is ice.",
+          "Blue is land, green is ice, and white is water.",
+          "Blue is ice, green is water, and white is land.",
+          "Blue is land, green is water, and white is ice."
+        ],
+        answer: 0,
+        why: "The different colors on Earth's surface represent different things. Blue represents water. Green represents land. White represents ice."
+      },
+      {
+        id: "alike",
+        group: "water",
+        topic: "Alike: mountain and hill",
+        prompt: "How are a mountain and a hill alike?",
+        choices: [
+          "Both are bodies of salt water.",
+          "Both are wide and flat.",
+          "Both are low land between taller places.",
+          "Both are landforms that rise above the land around them."
+        ],
+        answer: 3,
+        why: "A mountain and a hill are alike because both are landforms that rise above the land around them."
+      },
+      {
+        id: "different",
+        group: "water",
+        topic: "Different: mountain and hill",
+        prompt: "How are a mountain and a hill different?",
+        choices: [
+          "Hills are taller and steeper than mountains.",
+          "Mountains are taller and steeper. Hills are shorter and have gentler, rounded tops.",
+          "Both of them are flat plains.",
+          "Mountains are made of water and hills are made of ice."
+        ],
+        answer: 1,
+        why: "Mountains are taller and steeper than hills. Hills are shorter and have gentle slopes. A mountain has a steep, pointed top. A hill is smaller and has a rounded top."
+      }
+    ];
+
+    const WRITING = "A mountain and a hill are both landforms that rise above the land around them. A mountain is very tall and has a steep, pointed top. A hill is smaller and has a rounded top. Mountains are taller and steeper than hills. Hills are shorter and have gentle slopes.";
+
+    const MODE_META = {
+      land: { name: "Page 1 · Landforms", short: "Page 1" },
+      water: { name: "Page 2 · Water and compare", short: "Page 2" },
+      all: { name: "Full practice test", short: "Full test" },
+      retry: { name: "Tricky ones", short: "Practice" }
+    };
+
+    const LETTERS = ["A", "B", "C", "D"];
+    const CHEERS = ["Yes! That is right.", "You got it!", "That's the one!", "Nice remembering!"];
+
+    let modeId = "all";
+    let queue = [];
+    let sessionIds = [];
+    let cursor = 0;
+    let correctCount = 0;
+    let missed = [];
+    let locked = false;
+    let mixOn = false;
+    let speaking = false;
+    let speakToken = 0;
+    let keepAlive = 0;
+    let soundOn = true;
+    let audioCtx = null;
+    let cheerPick = 0;
+
+    const app = document.getElementById("app");
+
+    function esc(value) {
+      return String(value).replace(/[&<>"']/g, (ch) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[ch]));
+    }
+
+    function shuffle(list) {
+      const copy = list.slice();
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const hold = copy[i];
+        copy[i] = copy[j];
+        copy[j] = hold;
+      }
+      return copy;
+    }
+
+    function questionsFor(mode) {
+      if (mode === "all") return QUESTIONS.slice();
+      return QUESTIONS.filter((question) => question.group === mode);
+    }
+
+    function testMessage() {
+      const testDay = new Date(2026, 10, 19);
+      const today = new Date();
+      testDay.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+      const days = Math.round((testDay.getTime() - today.getTime()) / 86400000);
+      if (days === 0) return "Your science test is today. You can do this.";
+      if (days === 1) return "Your science test is tomorrow, Thursday, November 19.";
+      if (days > 1) return "Your science test is Thursday, November 19.";
+      return "Keep practicing your Unit 1 science ideas.";
+    }
+
+    function storageGet(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function storageSet(key, value) {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function loadSoundPref() {
+      soundOn = storageGet("everly-science-sound") !== "off";
+    }
+
+    function bestScore(mode) {
+      const raw = storageGet("everly-science-best-" + mode);
+      if (raw == null) return null;
+      const number = Number(raw);
+      return Number.isFinite(number) ? number : null;
+    }
+
+    function sceneSvg() {
+      return `
+        <svg class="scene" viewBox="0 0 640 180" role="img" aria-label="A sunny landscape with mountains, a hill, a lake, and a plain.">
+          <rect width="640" height="180" fill="#b9dff0"></rect>
+          <circle cx="78" cy="46" r="24" fill="#f6c445"></circle>
+          <g fill="#ffffff" opacity="0.92">
+            <ellipse cx="168" cy="42" rx="34" ry="14"></ellipse>
+            <ellipse cx="196" cy="40" rx="24" ry="12"></ellipse>
+            <ellipse cx="470" cy="56" rx="40" ry="14"></ellipse>
+            <ellipse cx="506" cy="54" rx="22" ry="11"></ellipse>
+          </g>
+          <g class="bird">
+            <circle cx="560" cy="38" r="5" fill="#1c2b24"></circle>
+            <path d="M565 38 L576 34 L565 43 Z" fill="#1c2b24"></path>
+          </g>
+          <path d="M16 150 L150 62 L250 150 Z" fill="#9aafbf"></path>
+          <path d="M150 150 L292 28 L448 150 Z" fill="#5d7284"></path>
+          <path d="M292 28 L326 66 L258 66 Z" fill="#f7fbff"></path>
+          <line x1="292" y1="28" x2="292" y2="12" stroke="#f7fbff" stroke-width="2"></line>
+          <path d="M292 12 L312 18 L292 24 Z" fill="#d4652f"></path>
+          <path d="M360 150 Q470 78 590 150 Z" fill="#6f8f55"></path>
+          <path d="M500 150 L500 126 L630 126 L630 150 Z" fill="#d2be86"></path>
+          <ellipse cx="214" cy="146" rx="86" ry="16" fill="#2f86ad"></ellipse>
+          <ellipse cx="196" cy="142" rx="28" ry="4" fill="#d7f3fb"></ellipse>
+          <rect y="150" width="640" height="30" fill="#e7d7b0"></rect>
+        </svg>`;
+    }
+
+    function shell(inner, options) {
+      const speakWhen = options && options.speakWhen;
+      const message = testMessage();
+      return `
+        <article class="card">
+          <header class="top">
+            <div class="stamp" aria-hidden="true"><span>Test day</span><strong>Thu</strong><em>Nov 19</em></div>
+            <p class="eyebrow">Science Unit 1</p>
+            <h1>Everly's practice</h1>
+            <p class="when"${speakWhen ? ` data-speak="${esc(message)}"` : ""}>${esc(message)}</p>
+            ${sceneSvg()}
+          </header>
+          ${inner}
+        </article>`;
+    }
+
+    function render(html) {
+      stopSpeaking();
+      app.innerHTML = html;
+      window.scrollTo(0, 0);
+      bind();
+    }
+
+    function renderStart() {
+      const landCount = questionsFor("land").length;
+      const waterCount = questionsFor("water").length;
+      const allCount = QUESTIONS.length;
+      const landBest = bestScore("land");
+      const waterBest = bestScore("water");
+      const allBest = bestScore("all");
+      const welcome = "Hi Everly. Tap the orange button any time. It will read the question and the answer choices out loud.";
+      const path = "Start with page 1, landforms. Then try page 2, water, map colors, and compare and contrast. The full test has every question.";
+
+      render(shell(`
+        <p class="welcome" data-speak="${esc(welcome)}">${esc(welcome)}</p>
+        <p class="blurb" data-speak="${esc(path)}">${esc(path)}</p>
+        <button type="button" class="read-btn" id="read" data-label="Hear how this works">Hear how this works</button>
+        <div class="row">
+          <label class="mix"><input type="checkbox" id="mix"> Mix up the questions</label>
+          <button type="button" class="sound-btn" id="sound">${soundOn ? "Sound on" : "Sound off"}</button>
+        </div>
+        <div class="modes">
+          <button type="button" class="mode" data-mode="land">
+            <span class="mode-kicker">Start here</span>
+            <span class="mode-title">Page 1 · Landforms</span>
+            <span class="mode-blurb">${landCount} questions about land, maps, and scientists</span>
+            ${landBest == null ? "" : `<span class="mode-best">Best score: ${landBest}/${landCount}</span>`}
+          </button>
+          <button type="button" class="mode" data-mode="water">
+            <span class="mode-kicker">Then try this</span>
+            <span class="mode-title">Page 2 · Water and compare</span>
+            <span class="mode-blurb">${waterCount} questions about water, colors, and mountains versus hills</span>
+            ${waterBest == null ? "" : `<span class="mode-best">Best score: ${waterBest}/${waterCount}</span>`}
+          </button>
+          <button type="button" class="mode featured" data-mode="all">
+            <span class="mode-kicker">When you are ready</span>
+            <span class="mode-title">Full practice test</span>
+            <span class="mode-blurb">${allCount} questions, in the same order as the review sheet</span>
+            ${allBest == null ? "" : `<span class="mode-best">Best score: ${allBest}/${allCount}</span>`}
+          </button>
+        </div>
+        <button type="button" class="sheet-toggle" id="sheets" aria-expanded="false" aria-controls="sheet-panel">See the review pages</button>
+        <div id="sheet-panel" hidden>
+          <figure>
+            <figcaption>Page 1</figcaption>
+            <img src="IMG_2122.jpg" alt="Science Unit 1 review page 1. It says the test is Thursday, November 19, 2026, and reviews landscape, slope, map, land surveyors, glaciologists, landforms, continents, islands, mountains, the Sierra Nevada, valleys, hills, and plains.">
+          </figure>
+          <figure>
+            <figcaption>Page 2</figcaption>
+            <img src="IMG_2123.jpg" alt="Science Unit 1 review page 2. It reviews water in oceans, lakes, rivers, ponds, and glaciers, map colors, and comparing two landforms. Handwritten notes compare mountains and hills.">
+          </figure>
+        </div>
+        <p class="fine">Every question comes from Everly's Unit 1 review. The real test may also ask her to write a short answer.</p>
+      `, { speakWhen: true }));
+    }
+
+    function renderQuestion() {
+      const question = queue[cursor];
+      const total = queue.length;
+      const meta = MODE_META[modeId];
+      const halfway = total >= 8 && cursor + 1 === Math.ceil(total / 2);
+      const speakPrompt = "Question " + (cursor + 1) + ". " + question.prompt;
+      const choices = question.choices.map((choice, index) => `
+        <label class="choice" data-speak="${esc(LETTERS[index] + ". " + choice)}">
+          <input type="radio" name="answer" value="${index}">
+          <span class="badge">${LETTERS[index]}</span>
+          <span>${esc(choice)}</span>
+        </label>
+      `).join("");
+
+      render(shell(`
+        <button type="button" class="read-btn" id="read" data-label="Read this to me">Read this to me</button>
+        <p class="count">${esc(meta.short)} · Question ${cursor + 1} of ${total}</p>
+        <div class="bar" role="progressbar" aria-valuemin="1" aria-valuemax="${total}" aria-valuenow="${cursor + 1}" aria-label="Question ${cursor + 1} of ${total}">
+          <span style="width:${((cursor + 1) / total) * 100}%"></span>
+        </div>
+        ${halfway ? `<p class="halfway" data-speak="Halfway there. You are doing great.">Halfway there. You are doing great.</p>` : ""}
+        <form id="qform">
+          <h2 id="prompt" tabindex="-1" data-speak="${esc(speakPrompt)}">${esc(question.prompt)}</h2>
+          <div class="choices">${choices}</div>
+          <button type="submit" class="go-btn" id="check" disabled>Check answer</button>
+          <button type="button" class="go-btn" id="next" hidden>${cursor === total - 1 ? "See my score" : "Next question"}</button>
+          <div id="feedback" hidden></div>
+        </form>
+      `));
+
+      const prompt = document.getElementById("prompt");
+      if (prompt) prompt.focus();
+    }
+
+    function starsFor(percent) {
+      if (percent >= 0.9) return "★★★★★";
+      if (percent >= 0.75) return "★★★★☆";
+      if (percent >= 0.5) return "★★★☆☆";
+      return "★★☆☆☆";
+    }
+
+    function resultMessage(percent) {
+      if (percent === 1) return "Perfect score, Everly. You are ready to show what you know.";
+      if (percent >= 0.8) return "So strong. Practice the few below one more time.";
+      if (percent >= 0.6) return "You already know a lot. The ones below are your study list.";
+      return "This is what practice is for. Learn these sentences, then try again.";
+    }
+
+    function renderResults() {
+      const total = queue.length;
+      const percent = total === 0 ? 0 : correctCount / total;
+      const meta = MODE_META[modeId];
+      let isNew = false;
+      if (modeId !== "retry") {
+        const previous = bestScore(modeId);
+        if (previous != null && correctCount > previous) isNew = true;
+        if (previous == null || correctCount > previous) {
+          storageSet("everly-science-best-" + modeId, String(correctCount));
+        }
+      }
+
+      const scoreSpeech = "You got " + correctCount + " out of " + total + ". " + resultMessage(percent);
+      const missedHtml = missed.map((item) => `
+        <article class="miss">
+          <h3>${esc(item.topic)}</h3>
+          <p>${esc(item.prompt)}</p>
+          <p>You picked: ${esc(item.picked)}</p>
+          <p class="remember">Remember: ${esc(item.why)}</p>
+        </article>
+      `).join("");
+
+      const missedSpeech = missed.map((item) => item.topic + ". " + item.why).join(" ");
+
+      render(shell(`
+        <p class="count">${esc(meta.name)}</p>
+        <p class="score">${correctCount} out of ${total}</p>
+        <p class="stars" aria-hidden="true">${starsFor(percent)}</p>
+        ${isNew ? `<p class="new-best">New best</p>` : ""}
+        <p class="welcome" id="score-line" data-speak="${esc(scoreSpeech)}">${esc(resultMessage(percent))}</p>
+        <button type="button" class="read-btn" id="read" data-label="Read my score">Read my score</button>
+        ${missed.length ? `
+          <h2>Practice these</h2>
+          <div id="missed-block" data-speech="${esc(missedSpeech)}">${missedHtml}</div>
+          <button type="button" class="ghost-btn" id="read-missed">Read the tricky ones</button>
+          <button type="button" class="go-btn" id="retry">Practice the tricky ones</button>
+        ` : ""}
+        <section class="write-card">
+          <h2>Short answer to practice</h2>
+          <p>The review says students will pick two landforms and tell how they are alike and different. Mountains and hills are a great pair.</p>
+          <p id="writing" data-speech="${esc(WRITING)}"><strong>${esc(WRITING)}</strong></p>
+        </section>
+        <button type="button" class="ghost-btn" id="read-writing">Read the short answer</button>
+        <button type="button" class="go-btn" id="again">Try this set again</button>
+        <button type="button" class="ghost-btn" id="home">Back to the start</button>
+      `));
+
+      if (percent >= 0.9) celebrate();
+      document.getElementById("live").textContent = scoreSpeech;
+    }
+
+    function celebrate() {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const layer = document.createElement("div");
+      layer.className = "confetti";
+      layer.setAttribute("aria-hidden", "true");
+      const colors = ["#f6c445", "#d4652f", "#2f86ad", "#146c43", "#fffaf3"];
+      for (let i = 0; i < 28; i += 1) {
+        const bit = document.createElement("i");
+        bit.style.left = Math.random() * 100 + "%";
+        bit.style.background = colors[i % colors.length];
+        bit.style.animationDelay = Math.random() * 0.25 + "s";
+        layer.appendChild(bit);
+      }
+      document.body.appendChild(layer);
+      setTimeout(() => layer.remove(), 1800);
+    }
+
+    function begin(mode, list) {
+      modeId = mode;
+      queue = list.slice();
+      cursor = 0;
+      correctCount = 0;
+      missed = [];
+      locked = false;
+      cheerPick = 0;
+      renderQuestion();
+    }
+
+    function beginMode(mode) {
+      const mixBox = document.getElementById("mix");
+      mixOn = !!(mixBox && mixBox.checked);
+      let list = questionsFor(mode);
+      if (mixOn) list = shuffle(list);
+      sessionIds = list.map((question) => question.id);
+      begin(mode, list);
+    }
+
+    function sameSessionList() {
+      return sessionIds.map((id) => QUESTIONS.find((question) => question.id === id)).filter(Boolean);
+    }
+
+    function bind() {
+      document.querySelectorAll("[data-mode]").forEach((button) => {
+        button.addEventListener("click", () => beginMode(button.getAttribute("data-mode")));
+      });
+
+      const sound = document.getElementById("sound");
+      if (sound) {
+        sound.addEventListener("click", () => {
+          soundOn = !soundOn;
+          storageSet("everly-science-sound", soundOn ? "on" : "off");
+          sound.textContent = soundOn ? "Sound on" : "Sound off";
+        });
+      }
+
+      const sheets = document.getElementById("sheets");
+      if (sheets) {
+        sheets.addEventListener("click", () => {
+          const panel = document.getElementById("sheet-panel");
+          const willOpen = panel.hasAttribute("hidden");
+          if (willOpen) panel.removeAttribute("hidden");
+          else panel.setAttribute("hidden", "");
+          sheets.setAttribute("aria-expanded", willOpen ? "true" : "false");
+          sheets.textContent = willOpen ? "Hide the review pages" : "See the review pages";
+        });
+      }
+
+      const form = document.getElementById("qform");
+      if (form) {
+        form.addEventListener("change", () => {
+          const check = document.getElementById("check");
+          if (check) check.disabled = false;
+        });
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          onCheck();
+        });
+      }
+
+      const next = document.getElementById("next");
+      if (next) next.addEventListener("click", onNext);
+
+      const read = document.getElementById("read");
+      if (read) read.addEventListener("click", onRead);
+
+      const readMissed = document.getElementById("read-missed");
+      if (readMissed) {
+        readMissed.addEventListener("click", () => {
+          const block = document.getElementById("missed-block");
+          if (block) speakParts([{ el: block, text: block.getAttribute("data-speech") }]);
+        });
+      }
+
+      const readWriting = document.getElementById("read-writing");
+      if (readWriting) {
+        readWriting.addEventListener("click", () => {
+          const writing = document.getElementById("writing");
+          if (writing) speakParts([{ el: writing, text: writing.getAttribute("data-speech") }]);
+        });
+      }
+
+      const retry = document.getElementById("retry");
+      if (retry) {
+        retry.addEventListener("click", () => {
+          const list = missed.map((item) => QUESTIONS.find((question) => question.id === item.id)).filter(Boolean);
+          sessionIds = list.map((question) => question.id);
+          begin("retry", list);
+        });
+      }
+
+      const again = document.getElementById("again");
+      if (again) {
+        again.addEventListener("click", () => {
+          let list = sameSessionList();
+          if (mixOn && modeId !== "retry") list = shuffle(list);
+          begin(modeId === "retry" ? "retry" : modeId, list);
+        });
+      }
+
+      const home = document.getElementById("home");
+      if (home) home.addEventListener("click", renderStart);
+    }
+
+    function onCheck() {
+      if (locked) return;
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) return;
+      locked = true;
+      const picked = Number(selected.value);
+      const question = queue[cursor];
+      const right = picked === question.answer;
+      if (right) correctCount += 1;
+      else {
+        missed.push({
+          id: question.id,
+          topic: question.topic,
+          prompt: question.prompt,
+          picked: question.choices[picked],
+          why: question.why
+        });
+      }
+
+      document.querySelectorAll("[data-speak]").forEach((el) => el.removeAttribute("data-speak"));
+      document.querySelectorAll(".choice").forEach((label, index) => {
+        if (index === question.answer) label.classList.add("is-correct");
+        else if (index === picked) label.classList.add("is-wrong");
+        const input = label.querySelector("input");
+        if (input) input.disabled = true;
+      });
+
+      const title = right ? CHEERS[cheerPick % CHEERS.length] : "Not quite. Let's remember this one.";
+      if (right) cheerPick += 1;
+      const speech = title + " " + question.why;
+      const feedback = document.getElementById("feedback");
+      feedback.className = right ? "good" : "learn";
+      feedback.hidden = false;
+      feedback.setAttribute("data-speak", speech);
+      feedback.replaceChildren();
+      const titleEl = document.createElement("p");
+      titleEl.className = "fb-title";
+      titleEl.textContent = title;
+      feedback.appendChild(titleEl);
+      if (!right) {
+        const pickedEl = document.createElement("p");
+        pickedEl.className = "fb-picked";
+        pickedEl.textContent = "You picked: " + question.choices[picked];
+        feedback.appendChild(pickedEl);
+      }
+      const whyEl = document.createElement("p");
+      whyEl.className = "fb-why";
+      whyEl.textContent = question.why;
+      feedback.appendChild(whyEl);
+
+      document.getElementById("check").hidden = true;
+      const next = document.getElementById("next");
+      next.hidden = false;
+      next.focus();
+      document.getElementById("live").textContent = speech;
+      chime(right);
+    }
+
+    function onNext() {
+      cursor += 1;
+      locked = false;
+      if (cursor >= queue.length) renderResults();
+      else renderQuestion();
+    }
+
+    function collectParts() {
+      return Array.from(document.querySelectorAll("[data-speak]")).map((el) => ({
+        el,
+        text: el.getAttribute("data-speak")
+      })).filter((part) => part.text);
+    }
+
+    function onRead() {
+      if (speaking) {
+        stopSpeaking();
+        updateReadLabel();
+        return;
+      }
+      speakParts(collectParts());
+    }
+
+    function pickVoice(voices) {
+      const english = voices.filter((voice) => /^en/i.test(voice.lang));
+      const score = (voice) => {
+        const name = voice.name.toLowerCase();
+        let value = 0;
+        if (/^en(-|_)US/i.test(voice.lang)) value += 4;
+        if (voice.localService) value += 3;
+        if (name.includes("zira") || name.includes("samantha") || name.includes("jenny")) value += 2;
+        if (name.includes("aria") || name.includes("google")) value += 1;
+        return value;
+      };
+      english.sort((a, b) => score(b) - score(a));
+      return english[0] || null;
+    }
+
+    let chosenVoice = null;
+    let queuedUtterances = [];
+    const appleTouch = /iPad|iPhone|iPod/.test(navigator.userAgent)
+      || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    function refreshVoice() {
+      if (!window.speechSynthesis) return;
+      chosenVoice = pickVoice(window.speechSynthesis.getVoices());
+    }
+
+    function showSpeechUnavailable() {
+      const live = document.getElementById("live");
+      const message = "This browser cannot read out loud. Try Safari, Edge, or Chrome.";
+      live.textContent = message;
+      const button = document.getElementById("read");
+      if (!button || document.getElementById("speech-note")) return;
+      const note = document.createElement("p");
+      note.id = "speech-note";
+      note.className = "fine";
+      note.textContent = message;
+      button.insertAdjacentElement("afterend", note);
+    }
+
+    function speakParts(parts) {
+      if (!window.speechSynthesis) {
+        showSpeechUnavailable();
+        return;
+      }
+      if (!parts.length) return;
+      stopSpeaking();
+      const token = speakToken;
+      const voice = chosenVoice;
+      const run = () => {
+        if (token !== speakToken) return;
+        queuedUtterances = [];
+        parts.forEach((part, index) => {
+          const utterance = new SpeechSynthesisUtterance(part.text);
+          queuedUtterances.push(utterance);
+          utterance.rate = 0.88;
+          utterance.pitch = 1.05;
+          utterance.lang = "en-US";
+          if (voice) utterance.voice = voice;
+          utterance.onstart = () => {
+            if (token !== speakToken) return;
+            document.querySelectorAll(".is-reading").forEach((el) => el.classList.remove("is-reading"));
+            if (part.el && part.el.isConnected) part.el.classList.add("is-reading");
+            speaking = true;
+            updateReadLabel();
+          };
+          utterance.onend = () => {
+            if (token !== speakToken) return;
+            if (index === parts.length - 1) {
+              document.querySelectorAll(".is-reading").forEach((el) => el.classList.remove("is-reading"));
+              speaking = false;
+              updateReadLabel();
+            }
+          };
+          utterance.onerror = () => {
+            if (token !== speakToken) return;
+            speaking = false;
+            document.querySelectorAll(".is-reading").forEach((el) => el.classList.remove("is-reading"));
+            updateReadLabel();
+          };
+          window.speechSynthesis.speak(utterance);
+        });
+        clearInterval(keepAlive);
+        keepAlive = setInterval(() => {
+          if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+            clearInterval(keepAlive);
+            return;
+          }
+          // iPad Safari stops long speech unless it is nudged.
+          if (appleTouch) window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }, appleTouch ? 10000 : 4000);
+      };
+      // Safari only allows speech that starts inside the tap. Chrome needs a beat after cancel().
+      if (appleTouch) {
+        window.speechSynthesis.resume();
+        run();
+      } else {
+        setTimeout(run, 60);
+      }
+    }
+
+    function stopSpeaking() {
+      speakToken += 1;
+      clearInterval(keepAlive);
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      queuedUtterances = [];
+      document.querySelectorAll(".is-reading").forEach((el) => el.classList.remove("is-reading"));
+      speaking = false;
+    }
+
+    function updateReadLabel() {
+      const button = document.getElementById("read");
+      if (!button) return;
+      button.textContent = speaking ? "Stop reading" : (button.getAttribute("data-label") || "Read this to me");
+      button.setAttribute("aria-pressed", speaking ? "true" : "false");
+    }
+
+    function getAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      return audioCtx;
+    }
+
+    function chime(right) {
+      if (!soundOn) return;
+      try {
+        const ctx = getAudio();
+        const now = ctx.currentTime;
+        const notes = right ? [523.25, 659.25, 783.99] : [392, 329.63];
+        notes.forEach((freq, index) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = freq;
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          const start = now + index * 0.09;
+          gain.gain.setValueAtTime(0.0001, start);
+          gain.gain.exponentialRampToValueAtTime(0.05, start + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.22);
+          osc.start(start);
+          osc.stop(start + 0.24);
+        });
+      } catch (error) {
+        soundOn = false;
+      }
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.repeat) return;
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.key.toLowerCase() !== "r") return;
+      const button = document.getElementById("read");
+      if (!button) return;
+      event.preventDefault();
+      button.click();
+    });
+
+    loadSoundPref();
+    if (window.speechSynthesis) {
+      refreshVoice();
+      window.speechSynthesis.addEventListener("voiceschanged", refreshVoice);
+    }
+    renderStart();
+  </script>
+</body>
+</html>
